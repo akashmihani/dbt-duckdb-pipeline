@@ -1,0 +1,68 @@
+models:
+  - name: jobs_per_month
+    description: "This model aggregates job postings by month and role."
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: month
+        description: "The month in which the job postings were made."
+      - name: role
+        description: "The search term representing the job role."
+      - name: postings
+        description: "The count of job postings for the given month and role."
+
+  - name: job_postings
+    description: "This model contains the raw job postings data."
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: job_id
+        description: "The timestamp when the job posting was made."
+      - name: job_title
+        description: "The title of the job posting."
+      - name: company_name
+        description: "The name of the company offering the job."
+      - name: job_location
+        description: "The location of the job posting."
+      - name: job_via
+        description: "The source through which the job posting was made."
+      - name: job_posted_at 
+        description: "The timestamp when the job posting was made."
+      - name: job_salary
+        description: "The salary offered for the job posting."  
+      - name: job_schedule_type
+        description: "The type of schedule for the job posting (e.g., full-time, part-time)."
+      - name: job_work_from_home
+        description: "Indicates whether the job posting allows for remote work or work from home."
+      - name: job_extensions_raw
+        description: "The type of employment for the job posting (e.g., permanent, contract)."
+      - name: job_detected_extensions_raw
+        description: "The industry associated with the job posting."
+      - name: search_time
+        description: "The timestamp when the job posting was made."
+      - name: search_date 
+        description: "The timestamp when the job posting was made."  
+      - name: search_term
+        description: "The search term used to find the job posting."
+      - name: search_location
+        description: "The location used in the search for the job posting."
+      - name: error_message
+        description: "Any error message encountered during the search for the job posting."
+
+  - name: top_locations
+    description: "This model aggregates job postings by location and role."
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: location
+        description: "The location of the job postings."
+      - name: role
+        description: "The search term representing the job role."
+      - name: postings
+        description: "The count of job postings for the given location and role."                          
