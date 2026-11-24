@@ -1,3 +1,9 @@
+{{ config(
+	materialized='view',
+	schema='analytics',
+	alias='job_postings'
+)}}
+
 select job_id,
 	job_title,
 	company_name,
@@ -16,4 +22,4 @@ select job_id,
 	"error",
 	error_message
 FROM {{ source('raw', 'job_postings') }}
-where error is null;
+where error is null
