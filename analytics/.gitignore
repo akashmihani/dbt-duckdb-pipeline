@@ -3,3 +3,11 @@ dbt_internal_packages/
 logs/
 target/
 .env
+
+# virtual environment
+.venv
+
+# database files
+data/
+*.duckdb
+logs/
