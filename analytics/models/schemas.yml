@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: jobs_per_month
     description: "This model aggregates job postings by month and role."
@@ -5,53 +7,76 @@ models:
       persist_docs:
         relation: true
         columns: true
+    # Optional: Requires dbt-utils package to enforce composite grain
+    # data_tests:
+    #   - dbt_utils.unique_combination_of_columns:
+    #       combination_of_columns:
+    #         - month
+    #         - role
     columns:
       - name: month
         description: "The month in which the job postings were made."
+        data_tests:
+          - not_null
       - name: role
         description: "The search term representing the job role."
+        data_tests:
+          - not_null
       - name: postings
         description: "The count of job postings for the given month and role."
+        data_tests:
+          - not_null
 
   - name: job_postings
-    description: "This model contains the raw job postings data."
+    description: "This model contains the cleaned/staged job postings data."
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: job_id
-        description: "The timestamp when the job posting was made."
+        description: "Unique identifier for the job posting."
       - name: job_title
         description: "The title of the job posting."
+        data_tests:
+          - not_null
       - name: company_name
         description: "The name of the company offering the job."
+        data_tests:
+          - not_null
       - name: job_location
         description: "The location of the job posting."
       - name: job_via
-        description: "The source through which the job posting was made."
-      - name: job_posted_at 
-        description: "The timestamp when the job posting was made."
+        description: "The job board or source through which the posting was listed."
+      - name: job_posted_at
+        description: "The relative or parsed timestamp indicating when the job was posted."
       - name: job_salary
-        description: "The salary offered for the job posting."  
+        description: "The salary or compensation range offered for the job posting."
       - name: job_schedule_type
         description: "The type of schedule for the job posting (e.g., full-time, part-time)."
       - name: job_work_from_home
-        description: "Indicates whether the job posting allows for remote work or work from home."
+        description: "Boolean flag indicating whether the job posting allows remote work."
       - name: job_extensions_raw
-        description: "The type of employment for the job posting (e.g., permanent, contract)."
+        description: "Raw list of additional job attributes (e.g., schedule, salary, benefits)."
       - name: job_detected_extensions_raw
-        description: "The industry associated with the job posting."
+        description: "Raw structured key-value metadata parsed from job extensions."
       - name: search_time
-        description: "The timestamp when the job posting was made."
-      - name: search_date 
-        description: "The timestamp when the job posting was made."  
+        description: "The exact timestamp when the search query was executed."
+        data_tests:
+          - not_null
+      - name: search_date
+        description: "The calendar date when the search query was executed."
+        data_tests:
+          - not_null
       - name: search_term
         description: "The search term used to find the job posting."
+        data_tests:
+          - not_null
       - name: search_location
-        description: "The location used in the search for the job posting."
+        description: "The location parameter used in the search query."
       - name: error_message
-        description: "Any error message encountered during the search for the job posting."
+        description: "Any error message encountered during ingestion or search for the posting."
+
 
   - name: top_locations
     description: "This model aggregates job postings by location and role."
@@ -60,25 +85,33 @@ models:
         relation: true
         columns: true
     columns:
-      - name: location
+      - name: job_location
         description: "The location of the job postings."
-      - name: role
-        description: "The search term representing the job role."
-      - name: postings
-        description: "The count of job postings for the given location and role."                          
+      - name: job_count
+        description: "The count of job postings for the given location and role."
+
+
 
   - name: monthly_summary
-    description: Monthly summary of job postings; one row per month.
+    description: "Monthly summary of job postings; one row per month."
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: month
-        description: Year and month of the summary.
+        description: "The summary month (one row per month)."
+        data_tests:
+          - unique
+          - not_null
       - name: total_postings
-        description: All postings that month (summed from jobs_per_month).
-      - name: remote_postings
-        description: Postings flagged remote that month.
-      - name: pct_remote
-        description: Share of the month's postings flagged remote, percent.
+        description: "All postings that month (summed from jobs_per_month)."
+        data_tests:
+          - not_null
+      - name: remote_jobs
+        description: "Postings flagged as remote that month."
+        data_tests:
+          - not_null
+      - name: remote_percentage
+        description: "Share of the month's postings flagged as remote, expressed as a percentage."
+
