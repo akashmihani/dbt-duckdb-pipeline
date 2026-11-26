@@ -1,7 +1,5 @@
 # Automated Job Postings Pipeline (v1) - dbt + DuckDB
 
-![dbt Production](https://shields.io)
-
 ![dbt pipeline diagram](img/dbt-pipeline.png)
 
 A public dbt + duckDB pipeline over ~700K real job postings, rebuilt and republished automatically on every push
