@@ -1,6 +1,5 @@
 {{ config(
-	materialized='view',
-	schema='analytics',
+	materialized='table',
 	alias='job_postings'
 )}}
 

@@ -16,3 +16,7 @@ logs/
 
 # dbt generated files
 .user.yml
+
+# docs files
+assets/
+info_schema/
